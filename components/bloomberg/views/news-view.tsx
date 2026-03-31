@@ -28,7 +28,7 @@ export default function NewsView({ isDarkMode, onBack }: NewsViewProps) {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("market");
+  const [searchTerm, setSearchTerm] = useState("india market");
 
   const colors = isDarkMode ? bloombergColors.dark : bloombergColors.light;
 

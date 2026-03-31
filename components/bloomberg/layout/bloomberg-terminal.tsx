@@ -23,6 +23,7 @@ import { TerminalFilterBar } from "../layout/terminal-filter-bar";
 import { TerminalHeader } from "../layout/terminal-header";
 import { TerminalLayout } from "../layout/terminal-layout";
 import type { FilterState, MarketItem } from "../types";
+import { FaView } from "../views/fa-view";
 import MarketMoversView from "../views/market-movers-view";
 import { MarketView } from "../views/market-view";
 import NewsView from "../views/news-view";
@@ -45,6 +46,7 @@ export default function BloombergTerminal() {
     handleMoversView,
     handleVolatilityView,
     handleRmiView,
+    handleFaView,
     handleCancelClick,
     handleNewClick,
     handleBlancClick,
@@ -182,6 +184,11 @@ export default function BloombergTerminal() {
       description: "Show volatility view",
     },
     {
+      key: "5",
+      action: handleFaView,
+      description: "Show financial analysis",
+    },
+    {
       key: "?",
       action: handleHelpClick,
       description: "Show keyboard shortcuts",
@@ -236,6 +243,14 @@ export default function BloombergTerminal() {
     );
   }
 
+  if (currentView === "fa") {
+    return (
+      <TerminalLayout shortcuts={shortcuts}>
+        <FaView isDarkMode={isDarkMode} onBack={handleBackFromView} />
+      </TerminalLayout>
+    );
+  }
+
   return (
     <TerminalLayout shortcuts={shortcuts}>
       <TerminalHeader
@@ -247,6 +262,7 @@ export default function BloombergTerminal() {
         onMoversClick={handleMoversView}
         onVolatilityClick={handleVolatilityView}
         onRmiClick={handleRmiView}
+        onFaClick={handleFaView}
         onHelpClick={handleHelpClick}
         onThemeToggle={handleThemeToggle}
       />

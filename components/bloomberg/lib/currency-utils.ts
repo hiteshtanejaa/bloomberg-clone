@@ -29,6 +29,7 @@ export function getCurrencySymbol(currencyCode: string): string {
     EUR: "€",
     GBP: "£",
     JPY: "¥",
+    INR: "₹",
   };
 
   return symbols[currencyCode] || currencyCode;
@@ -42,6 +43,15 @@ export function getCurrencySymbol(currencyCode: string): string {
  * @returns Formatted currency string
  */
 export function formatCurrency(value: number, currencyCode = "USD", decimals = 2): string {
+  if (currencyCode === "INR") {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    }).format(value);
+  }
+
   const symbol = getCurrencySymbol(currencyCode);
   return `${symbol}${value.toFixed(decimals)}`;
 }
