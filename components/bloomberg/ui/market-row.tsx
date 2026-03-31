@@ -55,6 +55,7 @@ export function MarketRow({
 
   const colors = isDarkMode ? bloombergColors.dark : bloombergColors.light;
   const fixedColumnClass = "w-[120px] sm:w-[140px] whitespace-nowrap overflow-hidden text-ellipsis";
+  const isIndiaMarket = region === "india" || region === "asiapacific";
 
   // Handle RMI cell click to navigate to RMI view
   const handleRmiClick = () => {
@@ -107,7 +108,9 @@ export function MarketRow({
         )}
       >
         {typeof item.value === "number" ? (
-          showCAD ? (
+          isIndiaMarket ? (
+            formatCurrency(item.value, "INR")
+          ) : showCAD ? (
             <span title={`USD: ${item.value.toFixed(2)}`}>
               {formatCurrency(convertToCAD(item.value), "CAD")}
             </span>

@@ -4,6 +4,7 @@ import { useMarketDataQuery } from "../hooks";
 import { bloombergColors } from "../lib/theme-config";
 import { MarketTable } from "../ui";
 import { GeneralMarketAnalysis } from "../ui/general-market-analysis";
+import { IndiaMarketOverview } from "../ui/india-market-overview";
 
 type MarketViewProps = {
   isDarkMode: boolean;
@@ -34,6 +35,8 @@ export function MarketView({ isDarkMode }: MarketViewProps) {
 
   return (
     <div>
+      <IndiaMarketOverview isDarkMode={isDarkMode} />
+
       <div className="overflow-x-auto">
         <MarketTable data={data} isDarkMode={isDarkMode} />
       </div>

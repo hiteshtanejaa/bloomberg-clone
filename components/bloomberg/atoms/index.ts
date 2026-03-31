@@ -17,7 +17,9 @@ export const errorAtom = atom<string | null>(null);
 export const isShortcutsHelpOpenAtom = atom(false);
 
 // View state atoms
-export const currentViewAtom = atom<"market" | "news" | "movers" | "volatility" | "rmi">("market");
+export const currentViewAtom = atom<"market" | "news" | "movers" | "volatility" | "rmi" | "fa">(
+  "market"
+);
 
 // RMI view state atoms
 export const rmiSelectedRegionAtom = atom<"americas" | "emea" | "asiaPacific">("asiaPacific");
