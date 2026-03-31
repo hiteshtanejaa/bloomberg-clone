@@ -18,6 +18,7 @@ const MARKET_INDICES = {
   "FTSE MIB": "FTSEMIB.MI",
   "OMX STKH30": "^OMX",
   "SWISS MKT": "^SSMI",
+  "NIFTY 50": "^NSEI",
   NIKKEI: "^N225",
   "HANG SENG": "^HSI",
   "CSI 300": "000300.SS",
@@ -171,18 +172,9 @@ export interface FetchAllMarketDataResult {
 
 export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
   const regions = {
-    americas: ["DOW JONES", "S&P 500", "NASDAQ", "S&P/TSX Comp", "S&P/BMV IPC", "IBOVESPA"],
-    emea: [
-      "Euro Stoxx 50",
-      "FTSE 100",
-      "CAC 40",
-      "DAX",
-      "IBEX 35",
-      "FTSE MIB",
-      "OMX STKH30",
-      "SWISS MKT",
-    ],
-    asiaPacific: ["NIKKEI", "HANG SENG", "CSI 300", "S&P/ASX 200"],
+    americas: [],
+    emea: [],
+    asiaPacific: ["NIFTY 50"],
   };
 
   const result: FetchAllMarketDataResult = {

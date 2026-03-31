@@ -63,12 +63,12 @@ export function MarketRow({
       setSelectedRegion("americas");
     } else if (region === "emea") {
       setSelectedRegion("emea");
-    } else if (region === "asiapacific") {
+    } else if (region === "asiapacific" || region === "india") {
       setSelectedRegion("asiaPacific");
     }
     // Set the selected security and default benchmark
     setSelectedSecurity(item.id);
-    setBenchmarkIndex("SPX:IND"); // Default benchmark
+    setBenchmarkIndex(undefined);
     // Navigate to RMI view
     setCurrentView("rmi");
   };

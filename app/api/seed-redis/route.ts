@@ -1,8 +1,8 @@
 import { marketData as fallbackData } from "@/components/bloomberg/lib/marketData";
+import type { MarketData, MarketItem } from "@/components/bloomberg/types";
 import { fetchAllMarketData, generateRandomSparkline } from "@/lib/alpha-vantage";
 import { redis } from "@/lib/redis";
 import { NextResponse } from "next/server";
-import type { MarketData, MarketItem } from "@/components/bloomberg/types";
 
 export async function GET() {
   try {
@@ -45,6 +45,25 @@ export async function GET() {
         },
         { ...fallbackData } as MarketData
       );
+    }
+
+    // Ensure newly added fallback indices like India are present even with older cached/live data
+    for (const region of ["americas", "emea", "asiaPacific"] as const) {
+      const existingItems = Array.isArray(marketData[region]) ? marketData[region] : [];
+      const fallbackItems = Array.isArray(fallbackData[region]) ? fallbackData[region] : [];
+
+      for (const fallbackItem of fallbackItems) {
+        const exists = existingItems.some((item) => item.id === fallbackItem.id);
+        if (!exists) {
+          existingItems.push({
+            ...fallbackItem,
+            sparkline1: generateRandomSparkline(),
+            sparkline2: generateRandomSparkline(),
+          });
+        }
+      }
+
+      marketData[region] = existingItems;
     }
 
     // Add timestamp to data

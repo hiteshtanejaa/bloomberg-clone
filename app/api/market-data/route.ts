@@ -15,6 +15,34 @@ const yearStartValues: Record<string, number> = {};
 // Sparkline update interval (5 minutes in milliseconds)
 const SPARKLINE_UPDATE_INTERVAL = 5 * 60 * 1000;
 
+function ensureRequiredIndices(data: MarketData): MarketData {
+  const now = new Date().toISOString();
+  const result = { ...data };
+
+  for (const region of ["americas", "emea", "asiaPacific"] as const) {
+    const currentItems = Array.isArray(result[region]) ? result[region] : [];
+    const fallbackItems = Array.isArray(fallbackData[region]) ? fallbackData[region] : [];
+
+    const mergedItems = [...currentItems];
+    for (const fallbackItem of fallbackItems) {
+      const exists = mergedItems.some((item) => item.id === fallbackItem.id);
+      if (!exists) {
+        mergedItems.push({
+          ...fallbackItem,
+          sparkline1: generateRandomSparkline(),
+          sparkline2: generateRandomSparkline(),
+          lastUpdated: now,
+          sparklineUpdated: now,
+        });
+      }
+    }
+
+    result[region] = mergedItems;
+  }
+
+  return result;
+}
+
 // Initialize year start values if not already set
 function initializeYearStartValues(data: MarketData) {
   if (Object.keys(yearStartValues).length === 0) {
@@ -224,7 +252,7 @@ async function generateRandomUpdates(data: MarketData) {
 // Helper function to enhance fallback data with sparklines
 function getEnhancedFallbackData() {
   const now = new Date().toISOString();
-  return Object.keys(fallbackData).reduce<MarketData>(
+  const enhancedFallback = Object.keys(fallbackData).reduce<MarketData>(
     (acc: MarketData, key: string) => {
       if (key === "americas" || key === "emea" || key === "asiaPacific") {
         acc[key] = fallbackData[key].map((item) => ({
@@ -255,6 +283,8 @@ function getEnhancedFallbackData() {
       lastSparklineUpdate: now,
     }
   );
+
+  return ensureRequiredIndices(enhancedFallback);
 }
 
 export async function GET() {
@@ -288,9 +318,11 @@ export async function GET() {
       });
     }
 
+    const normalizedRedisData = ensureRequiredIndices(redisData as MarketData);
+
     // Return the data from Redis with timestamp
     return NextResponse.json({
-      ...redisData,
+      ...normalizedRedisData,
       isFromRedis: true,
       lastFetched: new Date().toISOString(),
     });
@@ -326,7 +358,7 @@ export async function POST(request: Request) {
         isConnected = true;
 
         // Get current data from Redis
-        currentData = await redis.get("market_data");
+        currentData = ensureRequiredIndices((await redis.get("market_data")) as MarketData);
       } catch (redisError) {
         console.warn("Redis error:", redisError);
         isConnected = false;

@@ -64,25 +64,9 @@ export function MarketTable({ data, isDarkMode }: MarketTableProps) {
       </TableHeader>
       <TableBody>
         <MarketSection
-          title="Americas"
-          items={data.americas || []}
-          sectionNum="1)"
-          isDarkMode={isDarkMode}
-          updatedCells={updatedCells}
-          updatedSparklines={updatedSparklines}
-        />
-        <MarketSection
-          title="EMEA"
-          items={data.emea || []}
-          sectionNum="2)"
-          isDarkMode={isDarkMode}
-          updatedCells={updatedCells}
-          updatedSparklines={updatedSparklines}
-        />
-        <MarketSection
-          title="Asia/Pacific"
+          title="India"
           items={data.asiaPacific || []}
-          sectionNum="3)"
+          sectionNum="1)"
           isDarkMode={isDarkMode}
           updatedCells={updatedCells}
           updatedSparklines={updatedSparklines}

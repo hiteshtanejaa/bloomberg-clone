@@ -44,6 +44,20 @@ export function RmiView() {
   const securities: MarketItem[] = marketData[selectedRegion] || [];
 
   useEffect(() => {
+    if (securities.length === 0) {
+      if (selectedSecurity) {
+        setSelectedSecurity("");
+      }
+      return;
+    }
+
+    const currentSelectionIsValid = securities.some((item) => item.id === selectedSecurity);
+    if (!currentSelectionIsValid) {
+      setSelectedSecurity(securities[0].id);
+    }
+  }, [securities, selectedSecurity, setSelectedSecurity]);
+
+  useEffect(() => {
     const availableBenchmarks = securities.filter((item) => item.id !== selectedSecurity);
 
     if (availableBenchmarks.length === 0) {
@@ -99,12 +113,6 @@ export function RmiView() {
         </div>
       </div>
     );
-  }
-
-  // Get all available securities for the selected region
-  // If no security is selected yet, select the first one
-  if (!selectedSecurity && securities.length > 0) {
-    setSelectedSecurity(securities[0].id);
   }
 
   // Find the selected security and benchmark
